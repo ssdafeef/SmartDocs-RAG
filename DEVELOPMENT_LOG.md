@@ -21,10 +21,11 @@
 | `58a7905` | `feat: harden backend startup and API coverage` | `backend/main.py`, `backend/routes/upload.py`, `backend/tests/test_api_endpoints.py` | Added the FastAPI entry point, restricted CORS to configured local origins, reported scanned-PDF/OCR needs, and added HTTP contract tests. | Pushed | 37 |
 | `93b2975` | `feat: build responsive document research frontend` | `frontend/index.html`, `frontend/package.json`, `frontend/package-lock.json`, `frontend/postcss.config.js`, `frontend/tailwind.config.js`, `frontend/vite.config.js`, `frontend/src/main.jsx`, `frontend/src/App.jsx`, `frontend/src/styles.css` | Built responsive document upload/management and citation-backed chat UI. | Pushed | 38 |
 | `12d8884` | `docs: add SmartDocs setup and architecture guide` | `README.md` | Documented architecture, setup, workflow, endpoints, configuration, limitations, and tests. | Pushed | 39 |
+| `b35d6f4` | `fix: bound upload reads before size validation` | `backend/routes/upload.py`, `backend/tests/test_api_endpoints.py` | Limit upload reads to the configured maximum plus one byte and test rejection without persistence. | Pushed | 41 |
 
 ## Verification
 
-- Backend: `python -m pytest -q` — 34 passed.
+- Backend: `python -m pytest -q` — 35 passed.
 - Frontend: `npm run build` — passed.
 - Live backend: Uvicorn started; `/` and `/api/health` returned HTTP 200.
 - Live frontend: Vite started; `/` and `/src/App.jsx` returned HTTP 200.
@@ -32,4 +33,4 @@
 
 ## Commit target
 
-At the 39-commit push verification, 161 commits remained to reach the requested 200-commit target. Commit count is not a substitute for meaningful project work.
+At the 41-commit push verification, 159 commits remained to reach the requested 200-commit target. Commit count is not a substitute for meaningful project work.
