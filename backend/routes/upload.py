@@ -62,8 +62,10 @@ async def upload_documents(
         dest_path = settings.UPLOADS_DIR / dest_filename
 
         try:
-            # Read file bytes and check size
-            content = await file.read()
+            # Read at most one byte beyond the limit so oversized requests do not
+            # allocate the full upload in memory before validation.
+            max_bytes = settings.MAX_FILE_SIZE_MB * 1024 * 1024
+            content = await file.read(max_bytes + 1)
             if len(content) == 0:
                 results.append(
                     UploadFileResult(
@@ -77,7 +79,6 @@ async def upload_documents(
                 )
                 continue
 
-            max_bytes = settings.MAX_FILE_SIZE_MB * 1024 * 1024
             if len(content) > max_bytes:
                 results.append(
                     UploadFileResult(

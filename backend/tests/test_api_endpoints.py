@@ -107,3 +107,24 @@ def test_http_chat_uses_empty_library_response(monkeypatch):
     assert payload["found_relevant_context"] is False
     assert payload["citations"] == []
     assert payload["session_id"]
+
+
+def test_http_upload_rejects_oversized_file_without_persisting(tmp_path, monkeypatch):
+    """Reject an oversized upload after a bounded read and leave storage untouched."""
+    from backend.routes import upload as upload_route
+
+    upload_dir = tmp_path / "uploads"
+    monkeypatch.setattr(upload_route.settings, "UPLOADS_DIR", upload_dir)
+    monkeypatch.setattr(upload_route.settings, "MAX_FILE_SIZE_MB", 1)
+    too_large = b"%PDF-" + b"x" * (1024 * 1024)
+
+    response = client.post(
+        "/api/upload",
+        files={"files": ("large.pdf", too_large, "application/pdf")},
+    )
+
+    assert response.status_code == 200
+    result = response.json()["uploaded_files"][0]
+    assert result["status"] == "failed"
+    assert "maximum allowed size" in result["message"]
+    assert not upload_dir.exists()
