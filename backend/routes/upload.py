@@ -114,6 +114,13 @@ async def upload_documents(
                 vector_store.add_document_chunks(extracted_doc, [], None)
                 logger.warning("Document '%s' produced 0 chunks.", raw_filename)
 
+            if extracted_doc.total_chars == 0:
+                result_message = (
+                    "No selectable text was found. This PDF may be scanned; run OCR before uploading."
+                )
+            else:
+                result_message = f"Indexed {len(chunks)} chunks across {extracted_doc.total_pages} pages."
+
             results.append(
                 UploadFileResult(
                     document_id=doc_id,
@@ -121,7 +128,7 @@ async def upload_documents(
                     pages=extracted_doc.total_pages,
                     chunks=len(chunks),
                     status="success",
-                    message=f"Indexed {len(chunks)} chunks across {extracted_doc.total_pages} pages.",
+                    message=result_message,
                 )
             )
 
