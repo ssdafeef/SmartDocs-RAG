@@ -66,10 +66,12 @@ def format_file_size(num_bytes: int) -> str:
         num_bytes: Size in bytes.
 
     Returns:
-        Formatted string (e.g., '1.25 MB', '450 KB').
+        Formatted string (e.g., '1.5 MB', '450 KB').
     """
     for unit in ["B", "KB", "MB", "GB"]:
         if abs(num_bytes) < 1024.0:
-            return f"{num_bytes:.2f} {unit}".replace(".00", "")
+            formatted = f"{num_bytes:.2f}".rstrip("0").rstrip(".")
+            return f"{formatted} {unit}"
         num_bytes /= 1024.0
-    return f"{num_bytes:.2f} TB"
+    formatted = f"{num_bytes:.2f}".rstrip("0").rstrip(".")
+    return f"{formatted} TB"
