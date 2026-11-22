@@ -1,0 +1,10 @@
+# Testing Framework & Async Client
+pytest>=8.3.0
+pytest-asyncio>=0.24.0
+httpx>=0.27.0
+coverage>=7.6.0
+
+# Code Quality & Formatting
+flake8>=7.1.0
+black>=24.8.0
+isort>=5.13.0
